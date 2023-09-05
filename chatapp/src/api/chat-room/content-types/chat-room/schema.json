@@ -1,0 +1,28 @@
+{
+  "kind": "collectionType",
+  "collectionName": "chat_rooms",
+  "info": {
+    "singularName": "chat-room",
+    "pluralName": "chat-rooms",
+    "displayName": "Chat Room",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "ownerSocketId": {
+      "type": "string"
+    },
+    "clientSocketIt": {
+      "type": "string"
+    },
+    "ads": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::ad.ad",
+      "inversedBy": "chat_rooms"
+    }
+  }
+}

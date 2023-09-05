@@ -12,10 +12,12 @@ export default function Chat() {
   const [userr, setUserr] = useState("");
 
   const token = router.query.token; // Getting the token from the URL
+
   useEffect(() => {
     if (!router.isReady) return console.log("Loading... Please wait"); // Checking if the token has been fetched from the URL.
     try {
       const payload = jwt.verify(token, SECRET); // Verifying the token using the secret
+      console.log("we are here!");
       async function fetchData() {
         await fetch(`http://localhost:1337/api/accounts/${payload.id}`)
           .then(async (e) => {

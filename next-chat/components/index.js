@@ -18,6 +18,7 @@ function ChatRoom({ username, id }) {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const [users, setUsers] = useState([]);
+  const [chatRooms, setChatRooms] = useState([]);
 
   // useEffect(() => {
   //   if (Object.keys(joinData).length > 0) {

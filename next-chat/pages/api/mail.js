@@ -6,8 +6,8 @@ export default function (req, res) {
     host: "smtp.gmail.com",
     secure: "true",
     auth: {
-      user: "example@gmail.com",
-      pass: "password",
+      user: "hello@truemythgames.com",
+      pass: "jujwevvdzlqfdzjm",
     },
   });
 
@@ -24,4 +24,10 @@ export default function (req, res) {
     }
     res.status(200).json({ message: info });
   });
+}
+
+export const config = {
+  api: {
+    externalResolver: true,
+  },
 }
