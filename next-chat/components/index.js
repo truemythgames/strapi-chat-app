@@ -113,7 +113,7 @@ function ChatRoom({ username, id }) {
     <ChatContainer>
       <Header room="Group Chat" />
       <StyledContainer>
-        <List users={users} id={id} username={username} />
+        <List ads />
         <ChatBox>
           <Messages messages={messages} username={username} />
           <Input

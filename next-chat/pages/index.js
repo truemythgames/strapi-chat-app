@@ -1,8 +1,8 @@
 import styles from "../styles/Home.module.css";
 import { useState } from "react";
 import jwt from "jsonwebtoken";
-
 export default function Home() {
+
   const [email, setEmail] = useState("");
   const [user, setUser] = useState("");
   const handlesubmit = async (e) => {
@@ -58,6 +58,7 @@ export default function Home() {
     setUser("");
   };
   return (
+
     <div className={styles.container}>
       <form className={styles.main}>
         <h1>Login</h1>

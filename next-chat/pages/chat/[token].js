@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import jwt from "jsonwebtoken";
 import ChatRoom from "../../components/index";
-
+import AdsRoom from "../../components/AdListRoom/index"
 export default function Chat() {
   const router = useRouter();
   const SECRET = "this is a secret"; // JWT Secret
@@ -16,8 +16,8 @@ export default function Chat() {
   useEffect(() => {
     if (!router.isReady) return console.log("Loading... Please wait"); // Checking if the token has been fetched from the URL.
     try {
-      const payload = jwt.verify(token, SECRET); // Verifying the token using the secret
       console.log("we are here!");
+      const payload = jwt.verify(token, SECRET); // Verifying the token using the secret
       async function fetchData() {
         await fetch(`http://localhost:1337/api/accounts/${payload.id}`)
           .then(async (e) => {
@@ -44,7 +44,8 @@ export default function Chat() {
   return (
     <div>
       {done == "done" && userr === "done" ? ( // Waiting for access to be granted
-        <ChatRoom username={username} id={id} />
+        // <ChatRoom username={username} id={id} />
+        <AdsRoom  />
       ) : (
         <h1>Verifying token..... Please wait</h1>
       )}
