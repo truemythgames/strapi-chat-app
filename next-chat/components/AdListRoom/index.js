@@ -9,7 +9,7 @@ import {
     StyledContainer,
 } from "../../pages/chat/styles";
 
-function AdListRoom() {
+function AdListRoom(username) {
     const [ads, setAds] = useState([]);
     useEffect(() => {
         fetch('http://localhost:1337/api/ads/')
@@ -20,17 +20,17 @@ function AdListRoom() {
             })
     }, [])
 
-    const handleChange = (e) => {
-        setMessage(e.target.value);
-    };
+    // const handleChange = (e) => {
+    //     setMessage(e.target.value);
+    // };
 
-    const handleClick = () => {
-        sendMessage(message);
-    };
+    // const handleClick = () => {
+    //     sendMessage(message);
+    // };
 
     return (
         <ChatContainer>
-            <AdList ads={ads} />
+            <AdList ads={ads} username={username} />
         </ChatContainer>
     );
 }

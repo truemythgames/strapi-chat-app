@@ -42,7 +42,7 @@ function ChatRoom({ username, id }) {
       location.replace("http://localhost:3000/");
       console.log("disconnected");
     });
-    io.emit("join", { username }, (error) => {
+    io.emit("join", { username, chatRoom }, (error) => {
       if (error) return alert(error);
     });
     io.on("welcome", async (data, error) => {

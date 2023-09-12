@@ -12,16 +12,22 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "ownerSocketId": {
-      "type": "string"
-    },
-    "clientSocketIt": {
-      "type": "string"
-    },
     "ads": {
       "type": "relation",
       "relation": "manyToMany",
       "target": "api::ad.ad",
+      "mappedBy": "chat_rooms"
+    },
+    "owner": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::active-user.active-user",
+      "inversedBy": "chat_rooms"
+    },
+    "client": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::active-user.active-user",
       "inversedBy": "chat_rooms"
     }
   }

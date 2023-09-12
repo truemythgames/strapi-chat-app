@@ -23,6 +23,12 @@
       "relation": "manyToMany",
       "target": "api::chat-room.chat-room",
       "inversedBy": "ads"
+    },
+    "owner": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::account.account",
+      "inversedBy": "ads"
     }
   }
 }

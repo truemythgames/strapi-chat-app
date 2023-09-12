@@ -1,48 +1,52 @@
 import React from "react";
 import styled from "styled-components";
 import { List as AntdList, Avatar } from "antd";
+import socket from "socket.io-client";
 
 function AdList(props) {
-  const ads = props.ads.data;
-  const handleClick = async (id, socketid) => {
-    const io = socket("http://localhost:1337");
-    await fetch("http://localhost:1337/api/ads/" + id, {
-      method: "Join",
-      headers: {
-        "Content-type": "application/json",
-      },
-    })
-      .then(async (e) => {
-        io.emit("kick", { socketid }, (error) => {
-          if (error) return alert(error);
+    const ads = props.ads.data;
+    const username = props.username;
+    const handleClick = async (adId) => {
+        console.log(adId);
+        const io = socket("http://localhost:1337");
+        io.emit("join", { username, adId }, (error) => {
+            if (error) return alert(error);
         });
-        setTimeout(() => location.reload(), 3000);
-      })
-      .catch((e) => location.reload());
-  };
-  return (
-    <StyledList>
-      <ListHeading>Ads</ListHeading>
-      <AntdList
-        itemLayout="horizontal"
-        dataSource={ads}
-        renderItem={(ad) => (
-          <AntdList.Item>
-            <AntdList.Item.Meta
-             
-              title={ad.attributes.title}
+        // await fetch("http://localhost:1337/api/ads/" + id, {
+        //     method: "Join",
+        //     headers: {
+        //         "Content-type": "application/json",
+        //     },
+        // })
+            // .then(async (e) => {
+                
+                setTimeout(() => location.reload(), 3000);
+            // })
+            // .catch((e) => location.reload());
+    };
+    return (
+        <StyledList>
+            <ListHeading>Ads</ListHeading>
+            <AntdList
+                itemLayout="horizontal"
+                dataSource={ads}
+                renderItem={(ad) => (
+                    <AntdList.Item>
+                        <AntdList.Item.Meta
+
+                            title={ad.attributes.title}
+                        />
+                        <button
+
+                            onClick={() => handleClick(ad.id)}
+                        >
+                            Chat
+                        </button>
+                    </AntdList.Item>
+                )}
             />
-            <button
-            
-              onClick={() => handleClick(ad.id, ad.attributes.socketid)}
-            >
-              Chat
-            </button>
-          </AntdList.Item>
-        )}
-      />
-    </StyledList>
-  );
+        </StyledList>
+    );
 }
 
 export default AdList;

@@ -29,9 +29,10 @@ module.exports = {
       },
     });
     io.on("connection", function (socket) {
-      socket.on("join", async ({ username }) => {
+      socket.on("join", async ({ username, adId }) => {
         console.log("user connected");
         console.log("username is ", username);
+        console.log(adId);
         if (username) {
           socket.join("group");
           socket.emit("welcome", {

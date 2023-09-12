@@ -21,6 +21,12 @@
     },
     "token": {
       "type": "string"
+    },
+    "ads": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::ad.ad",
+      "inversedBy": "owner"
     }
   }
 }
