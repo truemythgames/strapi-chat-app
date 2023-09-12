@@ -4,22 +4,22 @@ import { List as AntdList, Avatar } from "antd";
 
 function AdList(props) {
   const ads = props.ads.data;
-//   const handleClick = async (id, socketid) => {
-//     const io = socket("http://localhost:1337");
-//     await fetch("http://localhost:1337/api/ads/", {
-//       method: "Delete",
-//       headers: {
-//         "Content-type": "application/json",
-//       },
-//     })
-//       .then(async (e) => {
-//         io.emit("kick", { socketid }, (error) => {
-//           if (error) return alert(error);
-//         });
-//         setTimeout(() => location.reload(), 3000);
-//       })
-//       .catch((e) => location.reload());
-//   };
+  const handleClick = async (id, socketid) => {
+    const io = socket("http://localhost:1337");
+    await fetch("http://localhost:1337/api/ads/" + id, {
+      method: "Join",
+      headers: {
+        "Content-type": "application/json",
+      },
+    })
+      .then(async (e) => {
+        io.emit("kick", { socketid }, (error) => {
+          if (error) return alert(error);
+        });
+        setTimeout(() => location.reload(), 3000);
+      })
+      .catch((e) => location.reload());
+  };
   return (
     <StyledList>
       <ListHeading>Ads</ListHeading>
@@ -30,11 +30,11 @@ function AdList(props) {
           <AntdList.Item>
             <AntdList.Item.Meta
              
-              title={ad.attributes.ads}
+              title={ad.attributes.title}
             />
             <button
             
-              onClick={() => handleClick(user.id, user.attributes.socketid)}
+              onClick={() => handleClick(ad.id, ad.attributes.socketid)}
             >
               Chat
             </button>
@@ -51,9 +51,9 @@ const StyledList = styled(AntdList)`
   margin-right: 10px;
   flex: 0 0 35%;
   padding: 20px;
-  .ant-list-item-meta-content {
-    flex-grow: 0;
-  }
+//   .ant-list-item-meta-content {
+//     flex-grow: 0;
+//   }
   h4 {
     font-size: 25px;
   }

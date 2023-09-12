@@ -15,7 +15,8 @@ function AdListRoom() {
         fetch('http://localhost:1337/api/ads/')
             .then((res) => res.json())
             .then((data) => {
-                setAds(data)
+                setAds(data);
+                console.log(data);
             })
     }, [])
 

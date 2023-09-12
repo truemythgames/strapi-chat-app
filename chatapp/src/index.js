@@ -9,7 +9,7 @@ module.exports = {
    *
    * This gives you an opportunity to extend code.
    */
-  register({ strapi }) { },
+  register({ strapi }) {},
 
   /**
    * An asynchronous bootstrap function that runs before
@@ -32,17 +32,6 @@ module.exports = {
       socket.on("join", async ({ username }) => {
         console.log("user connected");
         console.log("username is ", username);
-        await axios
-        .get("http://localhost:1337/api/ads")
-        .then(async (e) => {
-          console.log("list of ads ",e);
-          // socket.emit("roomData", { done: "true" });
-        })
-        .catch((e) => {
-          if (e.message == "Request failed with status code 400") {
-            // socket.emit("roomData", { done: "existing" });
-          }
-        });
         if (username) {
           socket.join("group");
           socket.emit("welcome", {
@@ -50,34 +39,12 @@ module.exports = {
             text: `${username}, Welcome to the group chat`,
             userData: username,
           });
-          //     let strapiData = {
-          //       data: {
-          //         users: username,
-          //         socketid: socket.id,
-          //       },
-          //     };
-          //     await axios
-          //       .post("http://localhost:1337/api/active-users", strapiData)
-          //       .then(async (e) => {
-          //         socket.emit("roomData", { done: "true" });
-          //       })
-          //       .catch((e) => {
-          //         if (e.message == "Request failed with status code 400") {
-          //           socket.emit("roomData", { done: "existing" });
-          //         }
-          //       });
-          //   } else {
-          //     console.log("e no work");
-          //   }
-          // });
-
           let strapiData = {
             data: {
               users: username,
               socketid: socket.id,
             },
           };
-          console.log(strapiData);
           await axios
             .post("http://localhost:1337/api/active-users", strapiData)
             .then(async (e) => {

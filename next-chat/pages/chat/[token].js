@@ -16,7 +16,6 @@ export default function Chat() {
   useEffect(() => {
     if (!router.isReady) return console.log("Loading... Please wait"); // Checking if the token has been fetched from the URL.
     try {
-      console.log("we are here!");
       const payload = jwt.verify(token, SECRET); // Verifying the token using the secret
       async function fetchData() {
         await fetch(`http://localhost:1337/api/accounts/${payload.id}`)
@@ -44,8 +43,8 @@ export default function Chat() {
   return (
     <div>
       {done == "done" && userr === "done" ? ( // Waiting for access to be granted
-        // <ChatRoom username={username} id={id} />
-        <AdsRoom  />
+        <ChatRoom username={username} id={id} />
+        // <AdsRoom  />
       ) : (
         <h1>Verifying token..... Please wait</h1>
       )}

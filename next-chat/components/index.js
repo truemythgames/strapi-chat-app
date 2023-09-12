@@ -18,7 +18,6 @@ function ChatRoom({ username, id }) {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const [users, setUsers] = useState([]);
-  const [chatRooms, setChatRooms] = useState([]);
 
   // useEffect(() => {
   //   if (Object.keys(joinData).length > 0) {
@@ -113,7 +112,7 @@ function ChatRoom({ username, id }) {
     <ChatContainer>
       <Header room="Group Chat" />
       <StyledContainer>
-        <List ads />
+        <List users={users} id={id} username={username} />
         <ChatBox>
           <Messages messages={messages} username={username} />
           <Input
