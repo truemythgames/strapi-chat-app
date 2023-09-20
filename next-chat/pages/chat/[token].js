@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import jwt from "jsonwebtoken";
 import ChatRoom from "../../components/index";
-import AdsRoom from "../../components/AdListRoom/index"
+import AdListRoom from "../../components/AdListRoom/index"
 export default function Chat() {
   const router = useRouter();
   const SECRET = "this is a secret"; // JWT Secret
@@ -44,7 +44,7 @@ export default function Chat() {
     <div>
       {done == "done" && userr === "done" ? ( // Waiting for access to be granted
         // <ChatRoom username={username} id={id} />
-        <AdsRoom username={username} />
+        <AdListRoom username={username} callerId={id} />
       ) : (
         <h1>Verifying token..... Please wait</h1>
       )}

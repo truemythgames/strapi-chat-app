@@ -6,10 +6,12 @@ import socket from "socket.io-client";
 function AdList(props) {
     const ads = props.ads.data;
     const username = props.username;
-    const handleClick = async (adId) => {
-        console.log(adId);
+    const callerId = props.callerId;
+
+    const handleClick = async (adId,username,callerId) => {
+
         const io = socket("http://localhost:1337");
-        io.emit("join", { username, adId }, (error) => {
+        io.emit("join", { username, adId, callerId }, (error) => {
             if (error) return alert(error);
         });
         // await fetch("http://localhost:1337/api/ads/" + id, {
@@ -20,9 +22,10 @@ function AdList(props) {
         // })
             // .then(async (e) => {
                 
-                setTimeout(() => location.reload(), 3000);
             // })
             // .catch((e) => location.reload());
+            // setTimeout(() => location.reload(), 3000);
+
     };
     return (
         <StyledList>
@@ -38,7 +41,7 @@ function AdList(props) {
                         />
                         <button
 
-                            onClick={() => handleClick(ad.id)}
+                            onClick={() => handleClick(ad.id,username,callerId)}
                         >
                             Chat
                         </button>

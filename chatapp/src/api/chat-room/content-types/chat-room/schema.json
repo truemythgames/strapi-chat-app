@@ -12,22 +12,22 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "ads": {
+    "ad": {
       "type": "relation",
       "relation": "manyToMany",
       "target": "api::ad.ad",
-      "mappedBy": "chat_rooms"
-    },
-    "owner": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::active-user.active-user",
       "inversedBy": "chat_rooms"
     },
-    "client": {
+    "seller": {
       "type": "relation",
       "relation": "manyToMany",
-      "target": "api::active-user.active-user",
+      "target": "api::account.account",
+      "inversedBy": "chat_rooms"
+    },
+    "buyer": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::account.account",
       "inversedBy": "chat_rooms"
     }
   }

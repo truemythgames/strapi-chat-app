@@ -26,7 +26,7 @@
       "type": "relation",
       "relation": "manyToMany",
       "target": "api::chat-room.chat-room",
-      "inversedBy": "client"
+      "mappedBy": "buyer"
     }
   }
 }

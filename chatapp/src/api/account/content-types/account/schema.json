@@ -26,7 +26,13 @@
       "type": "relation",
       "relation": "manyToMany",
       "target": "api::ad.ad",
-      "inversedBy": "owner"
+      "inversedBy": "seller"
+    },
+    "chat_rooms": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::chat-room.chat-room",
+      "mappedBy": "buyer"
     }
   }
 }

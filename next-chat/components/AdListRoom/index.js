@@ -9,7 +9,8 @@ import {
     StyledContainer,
 } from "../../pages/chat/styles";
 
-function AdListRoom(username) {
+function AdListRoom(props) {
+
     const [ads, setAds] = useState([]);
     useEffect(() => {
         fetch('http://localhost:1337/api/ads/')
@@ -17,6 +18,7 @@ function AdListRoom(username) {
             .then((data) => {
                 setAds(data);
                 console.log(data);
+              
             })
     }, [])
 
@@ -30,7 +32,7 @@ function AdListRoom(username) {
 
     return (
         <ChatContainer>
-            <AdList ads={ads} username={username} />
+            <AdList ads={ads} username={props.username} callerId={props.callerId} />
         </ChatContainer>
     );
 }

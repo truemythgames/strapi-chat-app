@@ -9,7 +9,7 @@ module.exports = {
    *
    * This gives you an opportunity to extend code.
    */
-  register({ strapi }) {},
+  register({ strapi }) { },
 
   /**
    * An asynchronous bootstrap function that runs before
@@ -29,35 +29,102 @@ module.exports = {
       },
     });
     io.on("connection", function (socket) {
-      socket.on("join", async ({ username, adId }) => {
+      socket.on("join", async ({ username, adId, callerId }) => {
         console.log("user connected");
-        console.log("username is ", username);
+        // console.log("username is ", username);
         console.log(adId);
-        if (username) {
-          socket.join("group");
+        console.log(callerId);
+
+        let seller = "";
+        await axios
+          .get("http://localhost:1337/api/ads/" + adId + "?populate=*")
+          .then(async (e) => {
+            // res = e.json();
+            // console.log(e.data.data.attributes.seller.data[0].id);
+            seller = e.data.data.attributes.seller.data[0].id;
+            // socket.emit("roomData", { done: "true" });
+          })
+          .catch((e) => {
+            if (e.message == "Request failed with status code 400") {
+              // socket.emit("roomData", { done: "existing" });
+            }
+          });
+
+
+        let isCallerTheSeller = false;
+        if (seller === callerId) {
+          isCallerOwner = true;
+        }
+        if (!isCallerTheSeller) {
+          let chatRoomExist = false;
+          let chatRoomId = 0;
+          await axios
+            .get("http://localhost:1337/api/chat-rooms?populate=*&filters[ad][id][$eq]=" + adId + "&filters[seller][id][$eq]=" + seller + "&filters[buyer][id][$eq]=" + callerId)
+            .then(async (e) => {
+              console.log(e.data);
+              if (e.data.data.length != 0) {
+                chatRoomExist = true;
+                chatRoomId = e.data.data[0].id;
+              }
+
+            })
+            .catch((e) => {
+              if (e.message == "Request failed with status code 400") {
+                // socket.emit("roomData", { done: "existing" });
+              }
+            });
+
+          if (chatRoomExist === false) {
+            let strapiData = {
+              data: {
+                ad: [adId],
+                seller: [seller],
+                buyer: [callerId],
+              },
+            };
+
+
+            await axios
+              .post("http://localhost:1337/api/chat-rooms", strapiData)
+              .then(async (e) => {
+                // console.log(e.data);
+                chatRoomId = e.data.data.id;
+                // socket.emit("roomData", { done: "true" });
+              })
+              .catch((e) => {
+                if (e.message == "Request failed with status code 400") {
+                  // socket.emit("roomData", { done: "existing" });
+                }
+              });
+
+          }
+
+          socket.join(chatRoomId);
           socket.emit("welcome", {
             user: "bot",
             text: `${username}, Welcome to the group chat`,
             userData: username,
           });
-          let strapiData = {
-            data: {
-              users: username,
-              socketid: socket.id,
-            },
-          };
-          await axios
-            .post("http://localhost:1337/api/active-users", strapiData)
-            .then(async (e) => {
-              socket.emit("roomData", { done: "true" });
-            })
-            .catch((e) => {
-              if (e.message == "Request failed with status code 400") {
-                socket.emit("roomData", { done: "existing" });
-              }
-            });
-        } else {
-          console.log("e no work");
+          socket.emit("roomData", { done: "true" });
+
+          //   let strapiData = {
+          //     data: {
+          //       users: username,
+          //       socketid: socket.id,
+          //     },
+          //   };
+          //   await axios
+          //     .post("http://localhost:1337/api/active-users", strapiData)
+          //     .then(async (e) => {
+          //       socket.emit("roomData", { done: "true" });
+          //     })
+          //     .catch((e) => {
+          //       if (e.message == "Request failed with status code 400") {
+          //         socket.emit("roomData", { done: "existing" });
+          //       }
+          //     });
+          // } else {
+          //   console.log("e no work");
         }
       });
       socket.on("sendMessage", async (data) => {
