@@ -8,6 +8,7 @@ import {
     ChatContainer,
     StyledContainer,
 } from "../../pages/chat/styles";
+import ChatRoom from "../../components/index";
 
 function AdListRoom(props) {
 
@@ -18,7 +19,7 @@ function AdListRoom(props) {
             .then((data) => {
                 setAds(data);
                 console.log(data);
-              
+
             })
     }, [])
 
@@ -30,9 +31,21 @@ function AdListRoom(props) {
     //     sendMessage(message);
     // };
 
+
+    const handleCallback = (data) => {
+        console.log("parentcallback")
+        return (
+            <ChatContainer>
+                <ChatRoom username={username} />
+            </ChatContainer>
+        )   
+    }
+
     return (
         <ChatContainer>
-            <AdList ads={ads} username={props.username} callerId={props.callerId} />
+            <AdList ads={ads} username={props.username} callerId={props.callerId} parentCallback={handleCallback} />
+            {/* <ChatRoom username={username} /> */}
+
         </ChatContainer>
     );
 }

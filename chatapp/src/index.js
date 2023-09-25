@@ -20,6 +20,7 @@ module.exports = {
    */
 
   bootstrap(/* { strapi } */) {
+    var groupId = "";
     var io = require("socket.io")(strapi.server.httpServer, {
       cors: {
         origin: "http://localhost:3000",
@@ -53,7 +54,8 @@ module.exports = {
 
         let isCallerTheSeller = false;
         if (seller === callerId) {
-          isCallerOwner = true;
+          console.log("caller is the owner!")
+          isCallerTheSeller = true;
         }
         if (!isCallerTheSeller) {
           let chatRoomExist = false;
@@ -61,16 +63,21 @@ module.exports = {
           await axios
             .get("http://localhost:1337/api/chat-rooms?populate=*&filters[ad][id][$eq]=" + adId + "&filters[seller][id][$eq]=" + seller + "&filters[buyer][id][$eq]=" + callerId)
             .then(async (e) => {
-              console.log(e.data);
+              // console.log(e.data);
               if (e.data.data.length != 0) {
                 chatRoomExist = true;
                 chatRoomId = e.data.data[0].id;
+                groupId = chatRoomId.toString;
+                console.log("emit roomdata")
+
+                socket.emit("roomData", { chatRoomId: chatRoomId });
               }
 
             })
             .catch((e) => {
               if (e.message == "Request failed with status code 400") {
                 // socket.emit("roomData", { done: "existing" });
+                socket.emit("roomData", { chatRoomId: chatRoomId });
               }
             });
 
@@ -89,23 +96,29 @@ module.exports = {
               .then(async (e) => {
                 // console.log(e.data);
                 chatRoomId = e.data.data.id;
+                console.log("emit roomdata")
+                socket.emit("roomData", { chatRoomId: chatRoomId });
+
                 // socket.emit("roomData", { done: "true" });
               })
               .catch((e) => {
+                console.log(e.message);
                 if (e.message == "Request failed with status code 400") {
+                  console.log("here")
+                  socket.emit("roomData", { chatRoomId: chatRoomId });
                   // socket.emit("roomData", { done: "existing" });
                 }
               });
 
           }
 
-          socket.join(chatRoomId);
+          socket.join(chatRoomId.toString);
           socket.emit("welcome", {
             user: "bot",
             text: `${username}, Welcome to the group chat`,
             userData: username,
           });
-          socket.emit("roomData", { done: "true" });
+          // socket.emit("roomData", { done: "true" });
 
           //   let strapiData = {
           //     data: {
@@ -138,7 +151,7 @@ module.exports = {
         await axios
           .post("http://localhost:1337/api/messages", strapiData)
           .then((e) => {
-            socket.broadcast.to("group").emit("message", {
+            socket.broadcast.to(groupId).emit("message", {
               user: data.username,
               text: data.message,
             });

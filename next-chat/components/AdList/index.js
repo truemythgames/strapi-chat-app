@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { List as AntdList, Avatar } from "antd";
 import socket from "socket.io-client";
@@ -7,10 +7,23 @@ function AdList(props) {
     const ads = props.ads.data;
     const username = props.username;
     const callerId = props.callerId;
+    const [users, setUsers] = useState([]);
+    const [done, setDone] = useState("");
 
-    const handleClick = async (adId,username,callerId) => {
+    const io = socket("http://localhost:1337");
+    io.on("roomData", async (data) => {
+        console.log(data.chatRoomId);
+        let chatRoomId = data.chatRoomId;
+        await fetch("http://localhost:1337/api/chat-rooms/" + chatRoomId + "?populate=*").then(async (e) => {
+            console.log(e.json());
+            props.parentCallback();
 
-        const io = socket("http://localhost:1337");
+            // setUsers(await e.json());
+        });
+    });
+
+    const handleClick = async (adId, username, callerId) => {
+
         io.emit("join", { username, adId, callerId }, (error) => {
             if (error) return alert(error);
         });
@@ -20,11 +33,11 @@ function AdList(props) {
         //         "Content-type": "application/json",
         //     },
         // })
-            // .then(async (e) => {
-                
-            // })
-            // .catch((e) => location.reload());
-            // setTimeout(() => location.reload(), 3000);
+        // .then(async (e) => {
+
+        // })
+        // .catch((e) => location.reload());
+        // setTimeout(() => location.reload(), 3000);
 
     };
     return (
@@ -41,7 +54,7 @@ function AdList(props) {
                         />
                         <button
 
-                            onClick={() => handleClick(ad.id,username,callerId)}
+                            onClick={() => handleClick(ad.id, username, callerId)}
                         >
                             Chat
                         </button>
